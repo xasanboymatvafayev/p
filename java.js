@@ -21,7 +21,48 @@ document.addEventListener('DOMContentLoaded', function() {
             themeToggle.checked = true;
         }
     }
-    
+ // Certificate modal functionality
+const modal = document.getElementById('certificateModal');
+const modalImg = document.getElementById('modalImage');
+const viewBtns = document.querySelectorAll('.view-certificate');
+const closeBtn = document.querySelector('.modal-close');
+
+viewBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const certificateCard = this.closest('.certificate-card');
+        const img = certificateCard.querySelector('.certificate-img img');
+        modal.style.display = 'flex';
+        modalImg.src = img.src;
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
+
+modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+});
+
+// Add smooth reveal animation for certificates
+const certificateObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.certificate-card').forEach(card => {
+    certificateObserver.observe(card);
+});   
     // Theme toggle event listener
     themeToggle.addEventListener('change', function() {
         if (this.checked) {
